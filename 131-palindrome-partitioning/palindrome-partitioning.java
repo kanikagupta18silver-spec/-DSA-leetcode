@@ -1,35 +1,44 @@
-import java.util.*;
-
 class Solution {
-    public List<List<String>> partition(String s) {
-        int n = s.length();
-        boolean[][] dp = new boolean[n][n];
-        
-        for (int i = n - 1; i >= 0; i--) {
-            for (int j = i; j < n; j++) {
-                if (s.charAt(i) == s.charAt(j) && (j - i <= 2 || dp[i + 1][j - 1])) {
-                    dp[i][j] = true;
-                }
+
+    public static boolean isPalindrome(String s)
+    {
+        int i = 0 , j = s.length()-1 ;
+        while(i < j)
+        {
+            if(s.charAt(i) != s.charAt(j))
+            {
+                return false ;
             }
+            i++ ;
+            j-- ;
         }
-        
-        List<List<String>> res = new ArrayList<>();
-        backtrack(0, s, dp, new ArrayList<>(), res);
-        return res;
+        return true ;
     }
-    
-    private void backtrack(int start, String s, boolean[][] dp, List<String> path, List<List<String>> res) {
-        if (start == s.length()) {
-            res.add(new ArrayList<>(path));
-            return;
+    public static void Solve(int i , String s , List<List<String>> ans, List<String> temp)
+    {
+
+        if(i == s.length())
+        {
+            ans.add(new ArrayList(temp)) ;
+            return ;
         }
+
+        for(int j = i ; j < s.length() ; j++)
+        {
+             if(isPalindrome(s.substring(i,j+1)))
+             {
+                temp.add(s.substring(i, j+1)) ;;
+                Solve(j+1,s,ans,temp) ;
+                temp.remove(temp.size()-1) ;
+             }
+        }
+    }
+    public List<List<String>> partition(String s) {
         
-        for (int end = start; end < s.length(); end++) {
-            if (dp[start][end]) {
-                path.add(s.substring(start, end + 1));
-                backtrack(end + 1, s, dp, path, res);
-                path.remove(path.size() - 1);
-            }
-        }
+        List<List<String>> ans = new ArrayList() ;
+        List<String> temp = new ArrayList() ;
+     
+        Solve(0,s,ans,temp) ;
+        return ans ;
     }
 }
