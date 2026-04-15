@@ -9,30 +9,40 @@
  * }
  */
 class Solution {
+    public static int lengthOfLinkedList(ListNode temp)
+    {
+        int count = 0 ;
+        while(temp != null)
+        {
+            temp = temp.next ;
+            count++ ;
+        }
+        return count ;
+    }
     public ListNode rotateRight(ListNode head, int k) {
-        if(head == null || head.next == null || k == 0) return head;
         
+        if(head == null || head.next == null || k == 0) return head ;
         ListNode temp = head;
-        int n = 1;
+        int len = lengthOfLinkedList(temp) ;
         
-        while(temp.next != null){
-            temp = temp.next;
-            n++;
+        k = k % len ;
+        if(k == 0) return head ;
+        int remaining = len - k ;
+        temp = head ;
+        
+        while(remaining > 1 && temp != null)
+        {
+            temp = temp.next ;
+            remaining-- ;
         }
-        
-        temp.next = head;
-        k = k % n;
-        
-        int steps = n - k;
-        ListNode newTail = temp;
-        
-        while(steps-- > 0){
-            newTail = newTail.next;
+        ListNode secondHead = temp.next  ;
+        temp.next = null ;
+        temp = secondHead ;
+        while(temp.next != null)
+        {
+            temp = temp.next ;
         }
-        
-        ListNode newHead = newTail.next;
-        newTail.next = null;
-        
-        return newHead;
+        temp.next = head ;
+        return secondHead ;
     }
 }
